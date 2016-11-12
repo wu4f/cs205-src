@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0" />
+
+<style type="text/css">
+* {
+margin:0px;
+padding:0px;
+}
+
+body {
+margin:20px;
+}
+
+p {
+margin:20px 0px 20px 0px;
+}
+
+hr {
+margin:20px 0px 20px 0px;
+}
+
+table {
+margin:20px;
+border:1px solid #333333;
+}
+
+table > tbody > tr > td {
+padding:10px;
+border:1px solid #333333;
+vertical-align:top;
+}
+</style>
+</head>
+<body>
+    <h1>Performance Assignment (SIMD)</h1>
+    <p>
+      This assignment requires you to write a function, using inline assembly, that takes three arbitrary-length vectors of double-precision floating point numbers a, b, and c, and perform the following operation:
+    </p>
+
+    <pre>
+      for (int i = 0; i < length; i++) {
+        a[i] += b[i] * c[i];
+      }
+    </pre>
+
+    <p>
+      The code above will calculate the correct result, but it performs slowly. Yours will need to be faster. Fortunately, we have hardware support for this; modern processors have a set of vector extensions called AVX2 that will allow us to perform calculations on up to four doubles at a time. In fact, AVX2 adds support for exactly this purpose through the use of the new FMA3 <a href='https://en.wikipedia.org/wiki/Multiply–accumulate_operation#Fused_multiply.E2.80.93add'>fused multiply-add</a> instructions.
+    
+      <br />
+
+      Distribution code for creating random vectors and testing the performance of your code against a naïve scalar implementation can be found here: <a href="https://bitbucket.org/wuchangfeng/cs201_simd">https://bitbucket.org/wuchangfeng/cs201_simd</a>
+    </p>
+
+    <h3>What to Submit</h3>
+
+    <p>
+      Your submission should be a single file with the title <span style='font-family: monospace'>submission.c</span>. This file should contain, at minimum, a function with the following signature:
+    </p>
+
+    <pre>
+      bool vector_fma(struct doubleVector * a, const struct doubleVector * b, const struct doubleVector * c)
+    </pre>
+
+    <p>
+      This function should work with the provided <span style='font-family: monospace'>main.c</span> and <span style='font-family: monospace'>Makefile</span>; there is no need to write or include your own. The function also should not print output to the screen or take input from the user.
+      <br /><br />
+
+      The return value should indicate whether or not the computation was successful. The only case that I can think of off the top of my head that would cause this to fail is if the vectors had varying lengths.
+    </p>
+
+    <h3>Grading Criteria</h3>
+
+    <p>
+      Assignments will be evaluated based on the following criteria:
+      <ul>
+        <li>Your submission should use inline C and vector instructions</li>
+        <li>Your submission should calculate the same result as the included scalar implementation for vector sets with arbitrary (strictly positive) lengths</li>
+        <li>For a vector of length 10,000,000, your implementation should perform (at minimum) 20 times faster than the included scalar implementation.</li>
+      </ul>
+      <br />
+      The file <span style='font-family: monospace'>main.c</span> contains code that will be used to test and benchmark your submission. Running this program should give you a good idea of whether or not your code is correct.
+    </p>
+
+    <h1>Notes and Hints</h1>
+
+    <p>
+      To complete this assignment, you'll need to work on a processor that supports AVX2 instructions. I would recommend <span style='font-family: monospace'</span>linuxlab.cs.pdx.edu</span>, which is also where submissions will be tested.
+
+      <br /><br />
+
+      Included in the distribution code is a file called <span style='font-family: monospace'>vectors.s</span>. This file contains a couple of assembly routines which are used to copy and compare vectors of doubles. Looking at these may be helpful, as they contain usage examples of most – if not all – of the vector instructions you need.
+
+      <br /><br />
+
+        You may notice that the scalar implementation is also written in assembly, and uses the <span style='font-family: monospace'>vfmadd132sd</span> instruction. This is necessary because FMA instructions are <a href='https://en.wikipedia.org/wiki/Multiply–accumulate_operation'>actually also more precise</a> than a separate multiplication and addition, since we only need to round once. If you're attempting to debug your code in GDB or similar by checking its results against expressions like <span style='font-family: monospace'>a->data[0] + b->data[0] * c->data[0]</span>, you may notice minute differences in the smallest decimal digits; this is why.
+    </p>
+
+    <h3>Vector Instructions</h3>
+
+    <p>
+      The two vector instructions described below are minimally sufficient to complete this assignment.
+    </p>
+
+    <h4 style='font-family: monospace'>vmovupd</h4>
+
+    <p>
+      <span style='font-family: monospace'>vmovupd</span>, or "Vector move unaligned packed doubles", is used to move multiple doubles at a time to
+      or from floating-point registers. It is analogous to a regular <span style='font-family:
+      monospace'>mov</span> instruction, and should
+      therefore be pretty familiar. Examples of usage can be found in <span style='font-family:
+      monospace'>vectors.c</span>.
+
+      <br /><br />
+
+      The number of doubles is determined by the size of the source/destination registers. If we
+      <span style='font-family: monospace'>vmovupd</span>
+      from memory to a 128-bit register such as <span style='font-family: monospace'>%xmm0</span>,
+      we'll move two doubles; if we <span style='font-family: monospace'>vmovupd</span> to a 256-bit
+      register such as <span style='font-family: monospace'>%ymm0</span>, we'll move four doubles.
+    </p>
+
+    <h4 style='font-family: monospace'>vfmadd231pd</h4>
+
+    <p>
+      <span style='font-family: monospace'>vfmadd231pd</span> performs a fused multiply-add operation on packed doubles. The 231 refers to the
+      fact that in Intel syntax, this multiplies together the second and third operands and adds the
+      product to the first.
+
+      Unfortunately, we're using AT&T syntax for our assembly, which means that our arguments are in
+      the opposite order. Consider the following usage example:
+    </p>
+
+    <pre>
+      vfmadd231pd %ymm0, %ymm1, %ymm2
+    </pre>
+
+    </p>
+      This multiplies the packed doubles stored in <span style='font-family: monospace'>%ymm0</span>
+      and <span style='font-family: monospace'>%ymm1</span>, and adds them to the packed
+      doubles in <span style='font-family: monospace'>%ymm2</span>. Since in AT&T syntax, the destination comes last, the result is also stored
+      in <span style='font-family: monospace'>%ymm2</span>.
+    </p>
+
+</body>
+</html>
