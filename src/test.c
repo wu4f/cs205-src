@@ -45,9 +45,15 @@ int main(int argc, char ** argv) {
   printf("%s\n", vector_compare(a, a2) ? "MATCH" : "NO MATCH");
 
   free(a->data);
+  free(a);
   free(b->data);
+  free(b);
   free(c->data);
+  free(c);
   free(a2->data);
+  free(a2);
   free(b2->data);
+  free(b2);
   free(c2->data);
+  free(c2);
 }
