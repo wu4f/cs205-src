@@ -1,4 +1,4 @@
-#CS 201 Performance Assignment
+#CS 201 SIMD Performance Assignment (A3)
 
 This assignment requires you to write a function, using inline assembly, that takes three arbitrary-length vectors of double-precision floating point numbers `a`, `b`, and `c`, and perform the following operation:
 ```
@@ -28,7 +28,7 @@ Assignments will be evaluated based on the following criteria:
 * Your submission should calculate the same result as the included scalar implementation for vector sets with arbitrary (strictly positive) lengths
 * For a vector of length 10,000,000, your implementation should perform (at minimum) 20 times faster than the included scalar implementation.
 
-If you'd like to try your code against the automated tests that they will be checked against, that code should be available as soon as it's finished here: https://github.com/RyanLB/CS-201-Public-Autograder-Tests
+If you'd like to try your code against the automated tests that they will be checked against, that code should be available as soon as it's finished here: https://bitbucket.org/wuchangfeng/cs201_simd_tests
 
 #Notes and Hints
 
