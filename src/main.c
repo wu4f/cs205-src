@@ -19,7 +19,7 @@ int perfTest(struct doubleVector *a,
 int main(void) {
   srand(time(NULL));
 
-  for(int i = 1; i <= 10; ++i) {
+  for(int i = 2; i <= 10; ++i) {
     testWithLength(i);
   }
 
@@ -54,7 +54,7 @@ bool testWithLength(int length) {
   printf("\tVector cycle count: %d\n", perfTest(a2, b2, c2, vector_fma));
 
   // Compare results
-  bool correct = memcmp(a->data,a2->data,8*(a->length-1));
+  bool correct = memcmp(a->data,a2->data,sizeof(a->data));
   printf("\t%s\n", correct ? "NO MATCH" : "MATCH");
   //correct = vector_compare(a, a2);
   //printf("\t%s\n", correct ? "MATCH" : "NO MATCH");
