@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include <time.h>
+#include <string.h>
 
 #include "vectors.h"
 
@@ -22,7 +23,7 @@ int main(void) {
     testWithLength(i);
   }
 
-  testWithLength(10000000); 
+  testWithLength(10000000);
 }
 
 /*
@@ -44,18 +45,20 @@ bool testWithLength(int length) {
   struct doubleVector * a2 = vector_clone(a);
   struct doubleVector * b2 = vector_clone(b);
   struct doubleVector * c2 = vector_clone(c);
-  
- 
-  // Test scalar performance 
+
+
+  // Test scalar performance
   printf("\tScalar cycle count: %d\n", perfTest(a, b, c, scalar_fma));
- 
+
   // Test vector performance
   printf("\tVector cycle count: %d\n", perfTest(a2, b2, c2, vector_fma));
 
   // Compare results
-  bool correct = vector_compare(a, a2);
-  printf("\t%s\n", correct ? "MATCH" : "NO MATCH");
-  
+  bool correct = memcmp(a->data,a2->data,8*(a->length-1));
+  printf("\t%s\n", correct ? "NO MATCH" : "MATCH");
+  //correct = vector_compare(a, a2);
+  //printf("\t%s\n", correct ? "MATCH" : "NO MATCH");
+
   // Free dynamic resources
   free(a->data);
   free(b->data);
@@ -79,7 +82,7 @@ int perfTest(struct doubleVector *a,
              bool(*fma)(struct doubleVector *,
                         const struct doubleVector *,
                         const struct doubleVector *)) {
-  
+
   int startCycles = rdtsc();
   fma(a, b, c);
   int endCycles = rdtsc();
