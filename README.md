@@ -24,9 +24,9 @@ The return value should indicate whether or not the computation was successful. 
 ###Grading Criteria
 
 Assignments will be evaluated based on the following criteria:
-* Your submission should use inline assembly and vector instructions
-* Your submission should calculate the same result as the included scalar implementation for vector sets with arbitrary (strictly positive) lengths
-* For a vector of length 10,000,000, your implementation should perform (at minimum) 20 times faster than the included scalar implementation.
++ Your submission should use inline assembly and vector instructions
++ Your submission should calculate the same result as the included scalar implementation for vector sets with arbitrary (strictly positive) lengths
++ For a vector of length 10,000,000, your implementation should perform (at minimum) 20 times faster than the included scalar implementation.
 
 If you'd like to try your code against some automated tests, you may try the auto-grader code in the tests directory.
 
