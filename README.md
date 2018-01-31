@@ -28,7 +28,7 @@ Assignments will be evaluated based on the following criteria:
 * Your submission should calculate the same result as the included scalar implementation for vector sets with arbitrary (strictly positive) lengths
 * For a vector of length 10,000,000, your implementation should perform (at minimum) 20 times faster than the included scalar implementation.
 
-If you'd like to try your code against the automated tests that they will be checked against, that code should be available as soon as it's finished here: https://bitbucket.org/wuchangfeng/cs201_simd_tests
+If you'd like to try your code against some automated tests, you may try the auto-grader code in the tests directory.
 
 #Notes and Hints
 
