@@ -5,6 +5,12 @@ The first set of tests (this one) is publicly accessible to allow students to
 verify that their formatting matches the specification. A second, private suite
 of tests may be used to evaluate submissions to prevent "coding to the tests".
 
+# Installing gems
+The test framework requires pry to be installed via
+```
+sudo gem install pry
+```
+
 # Installing and Running the Tests
 
 If you're on PSU's Linux labs, you can simply clone this repository to have access to the current tests:
