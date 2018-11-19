@@ -54,10 +54,10 @@ bool testWithLength(int length) {
   printf("\tVector cycle count: %d\n", perfTest(a2, b2, c2, vector_fma));
 
   // Compare results
-  bool correct = memcmp(a->data,a2->data,sizeof(a->data));
-  printf("\t%s\n", correct ? "NO MATCH" : "MATCH");
-  //correct = vector_compare(a, a2);
-  //printf("\t%s\n", correct ? "MATCH" : "NO MATCH");
+  // bool correct = memcmp(a->data,a2->data,sizeof(a->data));
+  // printf("\t%s\n", correct ? "NO MATCH" : "MATCH");
+  bool correct = vector_compare(a, a2);
+  printf("\t%s\n", correct ? "MATCH" : "NO MATCH");
 
   // Free dynamic resources
   free(a->data);
