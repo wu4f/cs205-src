@@ -2,6 +2,7 @@
 #define _RYAN_VEC
 
 #include <stdlib.h>
+#include <stdbool.h>
 
 struct doubleVector {
   size_t length;
