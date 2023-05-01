@@ -1,4 +1,4 @@
-#CS 201 SIMD Performance Assignment (A3)
+#CS 205 SIMD Performance Assignment (A3)
 
 This assignment requires you to write a function, using inline assembly, that takes three arbitrary-length vectors of double-precision floating point numbers `a`, `b`, and `c`, and perform the following operation:
 ```
