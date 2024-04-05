@@ -1,4 +1,4 @@
-#CS 205 SIMD Performance Assignment (A3)
+# CS 205 SIMD Performance Assignment (A3)
 
 This assignment requires you to write a function, using inline assembly, that takes three arbitrary-length vectors of double-precision floating point numbers `a`, `b`, and `c`, and perform the following operation:
 ```
@@ -11,7 +11,7 @@ The code above will calculate the correct result, but it performs slowly. Yours 
 
 This repo provides skeleton code for creating random vectors and testing the performance of your code against a naïve scalar implementation like the one above.
 
-###What to Submit
+### What to Submit
 
 Your submission should be a single file with the title `submission.c`. This file should contain, at minimum, a function with the following signature:
 
@@ -21,7 +21,7 @@ This function should work with the provided `main.c` and `Makefile`; there is no
 
 The return value should indicate whether or not the computation was successful. The only case that I can think of off the top of my head that would cause this to fail is if the vectors had varying lengths.
 
-###Grading Criteria
+### Grading Criteria
 
 Assignments will be evaluated based on the following criteria:
 *  Your submission should use inline assembly and vector instructions
@@ -30,7 +30,7 @@ Assignments will be evaluated based on the following criteria:
 
 If you'd like to try your code against some automated tests, you may try the auto-grader code in the tests directory.
 
-#Notes and Hints
+# Notes and Hints
 
 To complete this assignment, you'll need to work on a processor that supports AVX2 instructions. I would recomment `linuxlab.cs.pdx.edu`, which is also where submissions will be tested.
 
@@ -38,17 +38,17 @@ Included in the distribution code is a file called `vectors.s`. This file contai
 
 You may notice that the scalar implementation is also written in assembly, and uses the `vfmadd132sd` instruction. This is necessary because FMA instructions are [actually also more precise](https://en.wikipedia.org/wiki/Multiply–accumulate_operation) than a separate multiplication and addition, since we only need to round once. If you're attempting to debug your code in GDB or similar by checking its results against expressions like `a->data[0] + b->data[0] * c->data[0]`, you may notice minute differences in the smallest decimal digits; this is why.
 
-###Vector Instructions
+### Vector Instructions
 
 The two vector instructions described below are minimally sufficient to complete this assignment.
 
-####`vmovupd`
+#### `vmovupd`
 
 `vmovupd`, or "Vector move unaligned packed doubles", is used to move multiple doubles at a time to or from floating-point registers. It is analogous to a regular `mov` instruction, and should therefore be pretty familiar. Examples of usage can be found in `vectors.c`.
 
 The number of doubles is determined by the size of the source/destination registers. If we `vmovupd` from memory to a 128-bit register such as `xmm0`, we'll move two doubles; if we `vmovupd` to a 256-bit `ymm` register, we'll move four doubles.
 
-####`vfmadd231pd`
+#### `vfmadd231pd`
 
 `vfmadd231pd` performs a fused multiply-add operation on packed doubles. The `231` refers to the fact that in Intel syntax, this multiplies together the second and third operands and adds the product to the first.
 
